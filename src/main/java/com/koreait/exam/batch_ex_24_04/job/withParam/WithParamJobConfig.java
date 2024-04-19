@@ -27,7 +27,6 @@ public class WithParamJobConfig {
           .start(withParamStep1)
           .build();
    }
-
    @Bean
    @JobScope
    public Step withParamStep1(Tasklet withParamStep1Tasklet) {
@@ -36,7 +35,6 @@ public class WithParamJobConfig {
           .build();
 
    }
-
    @Bean
    @StepScope
    public Tasklet withParamStep1Tasklet(
