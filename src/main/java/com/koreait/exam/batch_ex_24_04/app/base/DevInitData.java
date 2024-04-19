@@ -2,7 +2,7 @@ package com.koreait.exam.batch_ex_24_04.app.base;
 
 import com.koreait.exam.batch_ex_24_04.app.cart.service.CartService;
 import com.koreait.exam.batch_ex_24_04.app.member.entity.Member;
-import com.koreait.exam.batch_ex_24_04.app.member.service.memberService;
+import com.koreait.exam.batch_ex_24_04.app.member.service.MemberService;
 import com.koreait.exam.batch_ex_24_04.app.order.service.OrderService;
 import com.koreait.exam.batch_ex_24_04.app.product.entity.Product;
 import com.koreait.exam.batch_ex_24_04.app.product.entity.ProductOption;
@@ -18,13 +18,25 @@ import java.util.Arrays;
 @Profile("dev")
 public class DevInitData {
    @Bean
-   public CommandLineRunner initData(memberService memberService, ProductService productService, CartService cartService, OrderService orderService) {
+   public CommandLineRunner initData(MemberService memberService, ProductService productService, CartService cartService, OrderService orderService) {
       return args -> {
          String password = "{noop}1234";
          Member member1 = memberService.join("user1", password, "user1@test.com");
          Member member2 = memberService.join("user2", password, "user2@test.com");
          Member member3 = memberService.join("user3", password, "user3@test.com");
          Member member4 = memberService.join("user4", password, "user4@test.com");
+
+         // 만원 충전
+         memberService.addCash(member1,10_000,"충전__무통장입금");
+         // 이만원 충전
+         memberService.addCash(member1,20_000,"충전__무통장입금");
+         // 오천원 사용
+         memberService.addCash(member1,-5_000,"출금__일반");
+
+         // 현재 보유중인 금액
+         long restCash = memberService.getRestCash(member1);
+
+         System.out.println("member1 rest cash: " + restCash);
 
          Product product1 = productService.create("셔츠 1", 68000, 45000, "평화-1-14",
              Arrays.asList(new ProductOption("RED", "95"),
